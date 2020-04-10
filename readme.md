@@ -1,1 +1,1 @@
-This is a repo for custom visual to read data from NFZ queues API
+This is a rzepo for custom visual to read data from NFZ queues API

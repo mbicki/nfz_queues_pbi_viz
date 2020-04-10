@@ -47,25 +47,78 @@ module powerbi.extensibility.visual {
             let api_url = _.get<string>(options, 'dataViews.0.single.value'); //|| [];
             let queuesAPI = _.get<string>(options, 'dataViews.0.single.value');
             //"https://api.nfz.gov.pl/app-itl-api/queues?page=1&limit=5&format=json&case=1&province=07&benefit=okul&benefitForChildren=false&api-version=1.3";
-            $("#queues").empty()
+            
             //this.updateCountContainer.html("")
             //this.updateCountContainer.html('<h1></h1>')
+            
+            function render_results (i, data){
+                $("#queues").empty();
+                let data_part = data.data.slice((i-1)*5,5*i)
+                for (let result of data_part){
+                $( "<h2>" ).html(" <small data-toggle='tooltip' data-placement='right' title='Dostępny termin'>"+result.attributes.dates.date+"</small></br>" + result.attributes.provider.toLowerCase()).appendTo( "#queues" );
+                $( "<h4>" ).html("<strong>"+ result.attributes.benefit.toLowerCase() + "</strong>").appendTo( "#queues" );
+                $(" <hr>").appendTo( "#queues" );
+                $( "<address>" ).html( result.attributes.provider.toLowerCase()
+                  + "</br>" + result.attributes.place.toLowerCase()
+                   + "</br>" + result.attributes.locality.toLowerCase() 
+                  + "</br>" + result.attributes.address.toLowerCase()
+                  + "</br>" + "<span class='glyphicon glyphicon-earphone' aria-hidden='true'></span> "
+                  + result.attributes.phone
+                  ).appendTo( "#queues" );
+                }
+
+                $( "#queues" ).append("<nav aria-label='...'>  <ul class='pager'>    <li id ='prev'><a href='#'>Previous</a></li>    <li id='next'><a href='#'>Next</a></li>  </ul></nav>")
+               
+                if (i>1){
+                    $( "#prev" ).mousedown(function() {
+                        i=i-1;
+                        render_results(i, data);
+                    })
+                }
+                else {
+                    $( "#prev" ).addClass('disabled');
+                };
+                
+                if (i<4 && i*5 < data.meta.count){
+                    
+                    $( "#next" ).mousedown(function() {
+                        i=i+1;
+                        render_results(i, data);
+                    })
+                }
+                else {
+                    $( "#next").addClass('disabled')
+                };
+                
+
+            };
+            let i = 1;
+            let data;
+            $("#queues").empty();
+            $( "<h4>" ).text("Loading...").appendTo( "#queues" );
             $.getJSON( queuesAPI)
-            .done(function( data ) {
+            .done(function( data_ ) {
+                data=data_
+                $("#queues").empty()
                 if ($("#queues").html() == ""){
-                    $( "<h3>" ).html( " <small>"+data.data[0].attributes.dates.date+"</small></br>" +data.data[0].attributes.provider.toLowerCase()).appendTo( "#queues" );
-                    $( "<h4>" ).html("<strong>"+ data.data[0].attributes.benefit.toLowerCase() + "</strong>").appendTo( "#queues" );
-                    $(" <hr>").appendTo( "#queues" );
-                    $( "<address>" ).html(
-                         "<strong>Dane adresowe:</strong>"
-                        + "</br>" +data.data[0].attributes.provider.toLowerCase()
-                        + "</br>" + data.data[0].attributes.place.toLowerCase()
-                        + "</br>" + data.data[0].attributes.locality.toLowerCase() 
-                        + "</br>" + data.data[0].attributes.address.toLowerCase()
-                        + "</br>" + "<span class='glyphicon glyphicon-earphone' aria-hidden='true'></span> "
-                        + data.data[0].attributes.phone
-                        ).appendTo( "#queues" );
-                    $( "#queues" ).append("<nav aria-label='...'>  <ul class='pager'>    <li><a href='#'>Previous</a></li>    <li><a href='#'>Next</a></li>  </ul></nav>")
+                    
+
+                        
+                        
+                      render_results(i, data)
+                    // $( "<h3>" ).html( " <small>"+data.data[0].attributes.dates.date+"</small></br>" +data.data[0].attributes.provider.toLowerCase()).appendTo( "#queues" );
+                    // $( "<h4>" ).html("<strong>"+ data.data[0].attributes.benefit.toLowerCase() + "</strong>").appendTo( "#queues" );
+                    // $(" <hr>").appendTo( "#queues" );
+                    // $( "<address>" ).html(
+                    //      "<strong>Dane adresowe:</strong>"
+                    //     + "</br>" +data.data[0].attributes.provider.toLowerCase()
+                    //     + "</br>" + data.data[0].attributes.place.toLowerCase()
+                    //     + "</br>" + data.data[0].attributes.locality.toLowerCase() 
+                    //     + "</br>" + data.data[0].attributes.address.toLowerCase()
+                    //     + "</br>" + "<span class='glyphicon glyphicon-earphone' aria-hidden='true'></span> "
+                    //     + data.data[0].attributes.phone
+                    //     ).appendTo( "#queues" );
+                    // $( "#queues" ).append("<nav aria-label='...'>  <ul class='pager'>    <li><a href='#'>Previous</a></li>    <li><a href='#'>Next</a></li>  </ul></nav>")
                 }
             });
             //console.log(test)

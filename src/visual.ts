@@ -60,20 +60,22 @@ module powerbi.extensibility.visual {
                     $("<h2>").html(" <small data-toggle='tooltip' data-placement='right' title='Dostępny termin'>" + result.attributes.dates.date + "</small></br>" + result.attributes.provider.toLowerCase()).appendTo($("#" + ii + ".item"));
                     $("<h4>").html("<strong>" + result.attributes.benefit.toLowerCase() + "</strong>").appendTo($("#" + ii + ".item"));
                     $(" <hr>").appendTo($("#" + ii + ".item"));
-                    $("<address>").css("display", "none").html(result.attributes.provider.toLowerCase()
-                        + "</br>" + result.attributes.place.toLowerCase()
-                        + "</br>" + result.attributes.locality.toLowerCase()
-                        + "</br>" + result.attributes.address.toLowerCase()
-                        + "</br>" + "<span class='glyphicon glyphicon-earphone' aria-hidden='true'></span> "
-                        + result.attributes.phone +"<hr>"
-                    ).appendTo($("#" + ii + ".item"));
+                    $("<div>").addClass("address").css("display", "none").appendTo($("#" + ii + ".item"));
+                    $("<address>").html(result.attributes.provider.toLowerCase()
+                      + "</br>" + result.attributes.place.toLowerCase()
+                      + "</br>" + result.attributes.locality.toLowerCase()
+                      + "</br>" + result.attributes.address.toLowerCase()
+                      + "</br>" + "<span class='glyphicon glyphicon-earphone' aria-hidden='true'></span> "
+                      + result.attributes.phone
+                    ).appendTo($("#" + ii + ".item > .address"));
+                    $("#" + ii + ".item > .address").append('<iframe width="95%" height="200" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBOfPQXsMnvYrjdANQkUIXxiRZ6MQPbcQs&zoom=13&q='+ result.attributes.latitude +','+ result.attributes.longitude + '" allowfullscreen></iframe>');
                     $("#" + ii + ".item").click(
                         function () {
-                            $("#" + ii + ".item address").slideToggle("slow");
+                            $("#" + ii + ".item > .address").slideToggle("slow");
                         }
                     )
                 };
-
+                $("#queues").append('<div style="height:60px"></div>')
                 $("<footer>").css("background-image", "linear-gradient(#cccccceb 1%, 10%, #ffffffeb 90%)").addClass("footer navbar-fixed-bottom").appendTo( "#queues");
                 $("footer").append("<nav aria-label='...'>  <ul class='pager'>    <li class='disabled' id ='prev'><a href='#'>Previous</a></li>    <li id='next'><a href='#'>Next</a></li>  </ul></nav>")
                 if (i > 1) {

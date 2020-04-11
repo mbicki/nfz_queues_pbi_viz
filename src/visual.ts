@@ -74,8 +74,8 @@ module powerbi.extensibility.visual {
                     )
                 };
 
-                $("#queues").append("<nav aria-label='...'>  <ul class='pager'>    <li id ='prev'><a href='#'>Previous</a></li>    <li id='next'><a href='#'>Next</a></li>  </ul></nav>")
-
+                $("<footer>").css("background-image", "linear-gradient(#cccccceb 1%, 10%, #ffffffeb 90%)").addClass("footer navbar-fixed-bottom").appendTo( "#queues");
+                $("footer").append("<nav aria-label='...'>  <ul class='pager'>    <li class='disabled' id ='prev'><a href='#'>Previous</a></li>    <li id='next'><a href='#'>Next</a></li>  </ul></nav>")
                 if (i > 1) {
                     $("#prev").click(function () {
                         i = i - 1;

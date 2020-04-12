@@ -1,20 +1,70 @@
 {
     "dataRoles": [
+
         {
-            "displayName": "API_url",
-            "name": "measure",
+            "displayName": "Benefit",
+            "name": "benefit",
+            "kind": "Measure"
+        },
+        {
+            "displayName": "Province id",
+            "name": "province_id",
+            "kind": "Measure"
+        },
+        {
+            "displayName": "Świadczeniodawca",
+            "name": "provider",
+            "kind": "Measure"
+        },
+        {
+            "displayName": "Miejscowość",
+            "name": "locality",
             "kind": "Measure"
         }
+
     ],
     "dataViewMappings": [
         {
             "conditions": [
-                { "measure": { "max": 1 } }
+                { 
+                "benefit": { "max": 1 },
+                "province_id": { "max": 1 },
+                "place": { "max": 1 },
+                "locality": { "max": 1 }
+                 
+             }
             ],
-            "single": {
-                "role": "measure"
-            }
-        }
+            
+            "categorical": {  
+                "values": {
+                        
+                            "select": [
+                                {
+                                    "for": {
+                                        "in": "benefit"
+                                    }
+                                },
+                                {
+                                    "for": {
+                                        "in": "province_id"
+                                    }
+                                },
+                                {
+                                    "for": {
+                                        "in": "provider"
+                                    }
+                                }
+                                ,
+                                {
+                                    "for": {
+                                        "in": "locality"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                
+            }         
     ],
     "objects": {}
 }

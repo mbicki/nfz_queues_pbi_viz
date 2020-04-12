@@ -44,10 +44,26 @@ module powerbi.extensibility.visual {
         public update(options: VisualUpdateOptions) {
             //Display update count
             //this.updateCountContainer.html(`<p>Update count: <em>${(this.updateCount++)}</em></p>`)
-            let api_url = _.get<string>(options, 'dataViews.0.single.value'); //|| [];
-            let queuesAPI = _.get<string>(options, 'dataViews.0.single.value');
+            let api_url = "https://api.nfz.gov.pl/app-itl-api/queues?page=1&limit=25&format=json&api-version=1.3";
+            let benefit = _.get<string>(options, 'dataViews.0.categorical.values.0.values');
+            let province = _.get<string>(options, 'dataViews.0.categorical.values.1.values');
+            let provider = _.get<string>(options, 'dataViews.0.categorical.values.2.values');
+            let locality = _.get<string>(options, 'dataViews.0.categorical.values.3.values');
+            if (benefit) {
+                api_url = api_url + "&benefit=" + benefit;
+            };
+            if (province) {
+                api_url = api_url + "&province=" + province;
+            };
+            if (provider) {
+                api_url = api_url + "&provider=" + provider;
+            };
+            if (locality) {
+                api_url = api_url + "&locality=" + locality;
+            };
+            //let queuesAPI = _.get<string>(options, 'dataViews.0.single.value');
 
-            $("<p>").text(api_url).appendTo("#queues");
+            
             function render_results(i, data) {
                 $("#queues").empty();
                 let data_part = data.data.slice((i - 1) * 5, 5 * i)
@@ -105,9 +121,10 @@ module powerbi.extensibility.visual {
             let i = 1;
             let data;
             $("#queues").empty();
-            if (api_url) {
+            
+            if (benefit || province) {
                 $("<h4>").text("Ładowanie...").appendTo("#queues");
-                $.getJSON(queuesAPI)
+                $.getJSON(api_url)
                     .done(function (data_) {
                         data = data_
                         $("#queues").empty()
@@ -118,6 +135,7 @@ module powerbi.extensibility.visual {
             }
             else {
                 $("<p>").text("Wybierz województwo lub typ świadczenia").appendTo("#queues");
+                
             };
 
 

@@ -45,10 +45,10 @@ module powerbi.extensibility.visual {
             //Display update count
             //this.updateCountContainer.html(`<p>Update count: <em>${(this.updateCount++)}</em></p>`)
             let api_url = "https://api.nfz.gov.pl/app-itl-api/queues?page=1&limit=25&format=json&api-version=1.3";
-            let benefit = _.get<string>(options, 'dataViews.0.categorical.values.0.values');
-            let province = _.get<string>(options, 'dataViews.0.categorical.values.1.values');
-            let provider = _.get<string>(options, 'dataViews.0.categorical.values.2.values');
-            let locality = _.get<string>(options, 'dataViews.0.categorical.values.3.values');
+            let benefit = _.get<string>(options, 'dataViews.0.categorical.values.0.values.0');
+            let province = _.get<string>(options, 'dataViews.0.categorical.values.1.values.0');
+            let provider = _.get<string>(options, 'dataViews.0.categorical.values.2.values.0');
+            let locality = _.get<string>(options, 'dataViews.0.categorical.values.3.values.0');
             if (benefit) {
                 api_url = api_url + "&benefit=" + benefit;
             };
@@ -121,7 +121,6 @@ module powerbi.extensibility.visual {
             let i = 1;
             let data;
             $("#queues").empty();
-            
             if (benefit || province) {
                 $("<h4>").text("Ładowanie...").appendTo("#queues");
                 $.getJSON(api_url)
@@ -134,7 +133,10 @@ module powerbi.extensibility.visual {
                     });
             }
             else {
-                $("<p>").text("Wybierz województwo lub typ świadczenia").appendTo("#queues");
+                $("<div id='welcome-msg' class='my-auto text-center'>").appendTo("#queues");
+                $("<img src='https://cloudsonmars.com/wp-content/uploads/2019/09/Component@2x.png'>").appendTo("#welcome-msg");
+                $("<p class='my-auto'>").text("Wyszukiwarka terminów leczenia w ramach NFZ").appendTo("#welcome-msg");
+                $("<p class='my-auto small'>").text("Wybierz województwo lub typ świadczenia").appendTo("#welcome-msg");
                 
             };
 
